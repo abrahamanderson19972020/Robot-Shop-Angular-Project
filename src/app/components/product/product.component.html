@@ -1,0 +1,22 @@
+<div class="product" *ngIf="product">
+  <div class="product-details">
+    <img
+      [src]="getFullImagePath(product.imageName)"
+      [alt]="product.imageName"
+    />
+    <div class="product-info">
+      <div class="name">{{ product.name | uppercase }}</div>
+      <div class="description">{{ product.description }}</div>
+      <div class="category">Part Type: {{ product.category }}</div>
+    </div>
+  </div>
+  <div class="price">
+    <div [ngClass]="product.discount ? 'strikethrough' : ''">
+      {{ product.price | currency }}
+    </div>
+    <div *ngIf="product.discount" [ngClass]="getClass(product)">
+      {{ getProductPrice(product) | currency }}
+    </div>
+    <button class="cta" (click)="buyProduct(product)">Buy</button>
+  </div>
+</div>

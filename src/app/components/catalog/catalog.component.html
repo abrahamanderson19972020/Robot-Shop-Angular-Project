@@ -1,6 +1,6 @@
 <div class="container">
   <div class="filters">
-    <a class="button" (click)="filterText = 'Heads'">Heads</a>
+    <a class="button bold" (click)="filterText = 'Heads'">Heads</a>
     <a class="button" (click)="filterText = 'Arms'">Arms</a>
     <a class="button" (click)="filterText = 'Tortos'">Torsos</a>
     <a class="button" (click)="filterText = 'Bases'">Bases</a>
@@ -9,25 +9,14 @@
 
   <ul class="products">
     <li class="product-item" *ngFor="let product of filterProducts()">
-      <div class="product" *ngIf="product">
-        <div class="product-details">
-          <img
-            [src]="getFullImagePath(product.imageName)"
-            [alt]="product.imageName"
-          />
-          <div class="product-info">
-            <div class="name">{{ product.name | uppercase }}</div>
-            <div class="description">{{ product.description }}</div>
-            <div class="category">Part Type: {{ product.category }}</div>
-          </div>
-        </div>
-        <div class="price">
-          <div [ngClass]="getClass(product)">
-            {{ getProductPrice(product) | currency }}
-          </div>
-          <button class="cta">Buy</button>
-        </div>
-      </div>
+      <app-product
+        [product]="product"
+        (chosenProduct)="addToCart($event)"
+      ></app-product>
     </li>
   </ul>
 </div>
+
+<h1>Updated Cart</h1>
+<hr />
+<p>Total: {{ cart | json }}</p>
