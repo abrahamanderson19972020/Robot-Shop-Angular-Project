@@ -1,10 +1,40 @@
 <div class="container">
   <div class="filters">
-    <a class="button bold" (click)="filterText = 'Heads'">Heads</a>
-    <a class="button" (click)="filterText = 'Arms'">Arms</a>
-    <a class="button" (click)="filterText = 'Tortos'">Torsos</a>
-    <a class="button" (click)="filterText = 'Bases'">Bases</a>
-    <a class="button" (click)="filterText = ''">All</a>
+    <a
+      class="button bold"
+      routerLink="/catalog/Heads"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Heads</a
+    >
+    <a
+      class="button"
+      routerLink="/catalog/Arms"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Arms</a
+    >
+    <a
+      class="button"
+      routerLink="/catalog/Torsos"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Torsos</a
+    >
+    <a
+      class="button"
+      routerLink="/catalog/Bases"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >Bases</a
+    >
+    <a
+      class="button"
+      routerLink="/catalog/"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{ exact: true }"
+      >All</a
+    >
   </div>
 
   <ul class="products">
@@ -16,7 +46,3 @@
     </li>
   </ul>
 </div>
-
-<h1>Updated Cart</h1>
-<hr />
-<p>Total: {{ cart | json }}</p>

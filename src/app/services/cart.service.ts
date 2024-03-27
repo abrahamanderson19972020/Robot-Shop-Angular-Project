@@ -9,7 +9,7 @@ import { Product } from '../models/product.model';
 })
 export class CartService {
   //private productsToCart: CartItem<Product>[] = [];
-  private productsToCart: Product[] = [];
+  private cart: BehaviorSubject<Product[]> = new BehaviorSubject<Product[]>([]);
   private cartSubject: Subject<CartItem<Product>[]> = new Subject<
     CartItem<Product>[]
   >();
@@ -19,52 +19,50 @@ export class CartService {
   urlCart: string = 'http://localhost:8081/api/cart';
   constructor(private httpClient: HttpClient) {}
 
-  getCartItems(): Observable<Product[]> {
-    return this.httpClient.get<Product[]>(this.urlCart);
+  getCartItems() {
+    this.httpClient.get<Product[]>(this.urlCart).subscribe((res) => {
+      this.totalCartPrice.next(this.calculateTotalPrice());
+      this.cart.next(res);
+    });
+  }
+
+  getCart(): Observable<Product[]> {
+    return this.cart.asObservable();
   }
 
   addToCart(product: Product) {
-    // const isFound = this.checkIsItemInCart(product.name);
-    // if (isFound !== undefined) {
-    // }
-    this.productsToCart.push(product);
-    this.httpClient
-      .post<Product[]>(this.urlCart, this.productsToCart)
-      .subscribe((res) => {
-        console.log(res);
-        console.log(product.name + ' id added to Cart');
-      });
+    const newCart = [...this.cart.getValue(), product];
+    this.cart.next(newCart);
+    this.httpClient.post<Product[]>(this.urlCart, newCart).subscribe((res) => {
+      console.log(res);
+      console.log(product.name + ' id added to Cart');
+      this.totalCartPrice.next(this.calculateTotalPrice());
+    });
   }
-  // addProductToCart(product: Product) {
-  //   let isFound = this.productsToCart.find((p) => p.item.name === product.name);
-  //   if (isFound !== undefined) {
-  //     isFound.quantity++;
-  //   } else {
-  //     let newItem: CartItem<Product> = {
-  //       item: product,
-  //       quantity: 1,
-  //     };
-  //     this.productsToCart.push(newItem);
-  //     this.cartSubject.next([...this.productsToCart]);
-  //   }
-  //   let totalPrice = this.calculateTotalPrice();
-  //   this.totalCartPrice.next(totalPrice);
-  // }
+
+  removeProductFromCart(product: Product) {
+    let newCart = this.cart.getValue().filter((i) => i !== product);
+    this.cart.next(newCart);
+    this.httpClient.post(this.urlCart, newCart).subscribe((res) => {
+      console.log(product.name + '  is removed from cart');
+      this.totalCartPrice.next(this.calculateTotalPrice());
+    });
+  }
 
   getProductListFromCart() {
     return this.cartSubject.asObservable();
   }
 
-  // private calculateTotalPrice(): number {
-  //   let totalPrice = 0;
-  //   this.productsToCart.forEach((it) => {
-  //     totalPrice +=
-  //       (it.item.price - it.item.price * it.item.discount) * it.quantity;
-  //   });
-  //   return totalPrice;
-  // }
+  private calculateTotalPrice(): number {
+    let totalPrice = 0;
+    this.cart.getValue().forEach((it) => {
+      totalPrice += it.price - it.price * it.discount;
+      //     (it.price - it.price * it.discount) * it.quantity;
+    });
+    return totalPrice;
+  }
 
-  getCalculatedTotalCartPrice() {
+  public getCalculatedTotalCartPrice() {
     return this.totalCartPrice.asObservable();
   }
 }
