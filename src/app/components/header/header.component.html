@@ -8,7 +8,11 @@
     </div>
   </div>
   <div class="right">
-    <a href="">Sign In</a>
-    <a href="" class="cta">Register</a>
+    <a routerLink="signin" routerLinkActive="active" *ngIf="!isUser">Sign In</a>
+    <a href="" class="cta" *ngIf="!isUser">Register</a>
+    <a *ngIf="isUser" (click)="logOut()">Logout</a>
+    <a *ngIf="isUser"
+      ><img src="/assets/images/profile.png" alt="isUser.email"
+    /></a>
   </div>
 </div>

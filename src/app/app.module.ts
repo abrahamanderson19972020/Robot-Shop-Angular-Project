@@ -9,6 +9,8 @@ import { ProductComponent } from './components/product/product.component';
 import { HttpClientModule } from '@angular/common/http';
 import { CartComponent } from './components/cart/cart.component';
 import { AppRoutingModule } from './app-routing.module';
+import { SigninComponent } from './components/signin/signin.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 @NgModule({
   declarations: [
@@ -18,11 +20,14 @@ import { AppRoutingModule } from './app-routing.module';
     HeaderComponent,
     ProductComponent,
     CartComponent,
+    SigninComponent,
   ],
   imports: [
-    BrowserModule, 
-    HttpClientModule, 
-    AppRoutingModule
+    BrowserModule,
+    HttpClientModule,
+    AppRoutingModule,
+    FormsModule,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
